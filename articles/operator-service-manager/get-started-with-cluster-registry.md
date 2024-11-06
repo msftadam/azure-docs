@@ -3,7 +3,7 @@ title: Get started with Azure Operator Service Manager cluster registry
 description: Azure Operator Service Manager cluster registry provides a locally resilent edge registry service to host Nexus K8s container image artifacts.
 author: msftadam
 ms.author: adamdor
-ms.date: 10/31/2024
+ms.date: 11/06/2024
 ms.topic: get-started
 ms.service: azure-operator-service-manager
 ---
@@ -159,7 +159,18 @@ All AOSM operator containers are configured with appropriate request, limit for 
 * Pod Anti affinity only deals with the initial placement of pods, subsequent pod scaling, and repair, follows standard K8s scheduling logic.
 
 ## Frequently Asked Questions
-* Can I use AOSM cluster registry with a CNF application previously deployed?
-  * If there's a CNF application already deployed without cluster registry, the container images are not available automatically. The cluster registry must be enabled before deploying the network function with AOSM.
-* Can I change the storage size after a deployment?
-  * Storage size can't be modified after the initial deployment. We recommend configuring the volume size by 3x to 4x of the starting size.
+#### Can I use AOSM cluster registry with a CNF application previously deployed?
+If there's a CNF application already deployed without cluster registry, the container images are not available automatically. The cluster registry must be enabled before deploying the network function with AOSM.
+
+#### Can I change the storage size after a deployment?
+Storage size can't be modified after the initial deployment. We recommend configuring the volume size by 3x to 4x of the starting size.
+
+#### Can I list the files presently stored in the cluster repository?
+The following command can be used to list files in a human readable format:
+```bash
+ kubectl get artifacts -A -o jsonpath='{range .items[*]}{.spec.sourceArtifact}'
+```
+This command should produce output similar to the following:
+```bash
+ ppleltestpublisheras2f88b55037.azurecr.io/nginx:1.0.0
+```
